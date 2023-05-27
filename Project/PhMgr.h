@@ -8,24 +8,22 @@
 
 namespace PhMgr
 {
-  static float currentPh        = 69.420;
-  static int   phStatus         = STATUS_IDLE;
-  static float targetPh         = 7.0;
-  static float phTolerance      = 0.5;
-  static int   phStep           = 500;
-  static int   phAdjustCooldown = 2000;
-  static int   phTestCooldown   = 60 * 1000;
-
-  static unsigned long actionEndTime = END_OF_TIME;
-  static unsigned long nextTestTime  = END_OF_TIME;
+  float GetCurrentPh();
+  int   GetStatus();
+  float GetTarget();
+  void  SetTarget(float target);
+  float GetTolerance();
+  void  SetTolerance(float tolerance);
+  int   GetStep();
+  void  SetStep(int step);
+  int   GetAdjustCooldown();
+  void  SetAdjustCooldown(int cooldown);
+  int   GetTestCooldown();
+  void  SetTestCooldown(int cooldown);
 
   void RunStepPhDown();
   void RunStepPhUp();
-  void SetTarget(float target);
-  void SetTolerance(float tolerance);
-  void SetStep(int step);
-  void SetAdjustCooldown(int cooldown);
-  void SetTestCooldown(int cooldown);
+  void StopPumps();
   void TestPh();
   void Update();
 }

@@ -130,20 +130,20 @@ char pageBuffer[6500];
 const char* WebUI::GetPageUI()
 {
   sprintf(pageBuffer, webPageUI, 
-  PhMgr::currentPh,
-  PhMgr::phStatus?"Adjusting":"Idle",
-  PhMgr::targetPh,
-  PhMgr::phTolerance,
-  PhMgr::phStep,
-  PhMgr::phAdjustCooldown,
-  PhMgr::phTestCooldown,
-  NutrientsMgr::currentNutrients,
-  NutrientsMgr::nutrientsStatus?"Adjusting":"Idle",
-  NutrientsMgr::targetNutrients,
-  NutrientsMgr::nutrientsTolerance,
-  NutrientsMgr::nutrientsStep,
-  NutrientsMgr::nutrientsAdjustCooldown,
-  NutrientsMgr::nutrientsTestCooldown
+  PhMgr::GetCurrentPh(),
+  STATUS_STRING[PhMgr::GetStatus()],
+  PhMgr::GetTarget(),
+  PhMgr::GetTolerance(),
+  PhMgr::GetStep(),
+  PhMgr::GetAdjustCooldown(),
+  PhMgr::GetTestCooldown(),
+  NutrientsMgr::GetCurrentNutrients(),
+  STATUS_STRING[NutrientsMgr::GetStatus()],
+  NutrientsMgr::GetTarget(),
+  NutrientsMgr::GetTolerance(),
+  NutrientsMgr::GetStep(),
+  NutrientsMgr::GetAdjustCooldown(),
+  NutrientsMgr::GetTestCooldown()
   );
   return pageBuffer;
 }
