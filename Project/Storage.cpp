@@ -39,12 +39,12 @@ unsigned int Storage::GetEntryCount() {
 Storage::StorageEntry Storage::CreateEntry(const char* entryName, size_t size) {
   if (Exists(entryName))
     return OpenEntry(entryName);
-    
+  
   unsigned int hash = Hash::FNVHash32(entryName, strlen(entryName));
 
   StorageEntry newEntry{ 0 };
   newEntry.name = hash;
-  newEntry.address = header.entries[header.entryCount - 1].address + header.entries[header.entryCount - 1].size;
+  newEntry.address = header.entryCount > 0 ? header.entries[header.entryCount - 1].address + header.entries[header.entryCount - 1].size : sizeof(StorageHeader);
   newEntry.size = size;
 
   header.entries[header.entryCount] = newEntry;
