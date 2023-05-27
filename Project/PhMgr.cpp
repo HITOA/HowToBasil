@@ -60,6 +60,7 @@ void PhMgr::Update()
   unsigned long timeElapsed = millis();
   if(timeElapsed > actionEndTime)
   {
+    actionEndTime = END_OF_TIME;
     SERIAL_PRINTLN("Stop pumping PH stabilizer");
     digitalWrite(PUMP_PH_DOWN, LOW);
     digitalWrite(PUMP_PH_UP, LOW);

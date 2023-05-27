@@ -15,8 +15,8 @@ namespace NutrientsMgr
   static int   nutrientsAdjustCooldown = 2000;
   static int   nutrientsTestCooldown   = 60 * 1000;
 
-  static unsigned long actionEndTime;
-  static unsigned long nextTestTime;
+  static unsigned long actionEndTime = END_OF_TIME;
+  static unsigned long nextTestTime  = END_OF_TIME;
 
   void RunStepNutrientsUp();
   void SetTarget(float target);

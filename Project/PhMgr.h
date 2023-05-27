@@ -16,8 +16,8 @@ namespace PhMgr
   static int   phAdjustCooldown = 2000;
   static int   phTestCooldown   = 60 * 1000;
 
-  static unsigned long actionEndTime;
-  static unsigned long nextTestTime;
+  static unsigned long actionEndTime = END_OF_TIME;
+  static unsigned long nextTestTime  = END_OF_TIME;
 
   void RunStepPhDown();
   void RunStepPhUp();

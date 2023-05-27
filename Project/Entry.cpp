@@ -14,6 +14,7 @@ void setup()
 
   pinMode(LED, OUTPUT);
   digitalWrite(LED, 0);
+  Serial.flush();
 
   WifiMgr::SetupWifi();
   WifiMgr::ConnectWifi();

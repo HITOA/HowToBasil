@@ -53,6 +53,7 @@ void NutrientsMgr::Update()
   unsigned long timeElapsed = millis();
   if(timeElapsed > actionEndTime)
   {
+    actionEndTime = END_OF_TIME;
     SERIAL_PRINTLN("Stop pumping Nutrients");
     digitalWrite(PUMP_NUTRIENTS, LOW);
   }

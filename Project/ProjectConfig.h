@@ -11,4 +11,6 @@
 
 #define LED 13
 
+#define END_OF_TIME 4294967295
+
 #endif

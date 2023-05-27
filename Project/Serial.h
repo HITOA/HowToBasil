@@ -1,6 +1,6 @@
 #ifndef SERIAL_HEADER
 #define SERIAL_HEADER
-
+#include "ProjectConfig.h"
 #include <arduino.h>
 
 #ifdef SERIAL_ENABLE
