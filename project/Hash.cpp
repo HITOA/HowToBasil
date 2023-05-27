@@ -1,4 +1,4 @@
-#include "hash.h"
+#include "Hash.h"
 
 unsigned int Hash::FNVHash32(const char* data, size_t size) {
   unsigned int hash = FNV_OFFSET_BASIS_32;

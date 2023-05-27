@@ -1,9 +1,9 @@
-#include "storage.h"
+#include "Storage.h"
 
 #include <EEPROM.h>
-#include "config.h"
-#include "serial.h"
-#include "hash.h"
+#include "ProjectConfig.h"
+#include "Serial.h"
+#include "Hash.h"
 
 Storage::StorageHeader header{ 0 };
 
@@ -89,6 +89,7 @@ bool Storage::DeleteEntry(const char* entryName) {
   --header.entryCount;
   EEPROM.put(0, header);
   EEPROM.commit();
+
   return true;
 }
 

@@ -1,7 +1,7 @@
 #include <arduino.h>
-#include "config.h"
-#include "serial.h"
-#include "storage.h"
+#include "ProjectConfig.h"
+#include "Serial.h"
+#include "Storage.h"
 #include "WifiMgr.h"
 #include "WebServer.h"
 
