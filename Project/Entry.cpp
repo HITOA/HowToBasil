@@ -3,7 +3,9 @@
 #include "Serial.h"
 #include "Storage.h"
 #include "WifiMgr.h"
-#include "WebServer.h"
+#include "BasilWebServer.h"
+#include "PhMgr.h"
+#include "NutrientsMgr.h"
 
 void setup()
 {
@@ -16,12 +18,12 @@ void setup()
   WifiMgr::SetupWifi();
   WifiMgr::ConnectWifi();
 
-  WebServer::Setup();
+  BasilWebServer::Setup();
 }
 
 void loop(void)
 {
   PhMgr::Update();
   NutrientsMgr::Update();
-  WebServer::Update();
+  BasilWebServer::Update();
 }
