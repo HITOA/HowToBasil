@@ -3,7 +3,6 @@
 #include "serial.h"
 #include "storage.h"
 #include "WifiMgr.h"
-#include "data.h"
 #include "WebServer.h"
 
 void setup()
@@ -13,7 +12,7 @@ void setup()
 
   pinMode(LED, OUTPUT);
   digitalWrite(LED, 0);
-  
+
   WifiMgr::SetupWifi();
   WifiMgr::ConnectWifi();
 

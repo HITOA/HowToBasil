@@ -6,4 +6,9 @@
 
 #define EEPROM_MAX_SIZE 4096
 
+#define STATUS_IDLE   0
+#define STATUS_ADJUST 1
+
+#define LED 13
+
 #endif
