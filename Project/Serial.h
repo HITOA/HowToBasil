@@ -2,6 +2,7 @@
 #define SERIAL_HEADER
 #include "ProjectConfig.h"
 #include <arduino.h>
+#include "ProjectConfig.h"
 
 #ifdef SERIAL_ENABLE
 

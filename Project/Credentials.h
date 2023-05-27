@@ -1,7 +1,7 @@
 #ifndef CREDENTIALS_HEADER
 #define CREDENTIALS_HEADER
 
-const char* ssid = "mySSID";
-const char* password = "myPassword";
+#define SSID "mySSID"
+#define PASSWORD "myPassword"
 
 #endif
