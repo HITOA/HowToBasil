@@ -15,57 +15,57 @@ namespace PhMgr
   unsigned long actionEndTime;
   unsigned long nextTestTime;
 
-  void runStepPhDown()
+  void RunStepPhDown()
   {
     Serial.println("Activating PH stabilizer pump (lowering PH)");
     actionEndTime = millis() + phStep;
     digitalWrite(PUMP_PH_DOWN, HIGH);
   }
 
-  void runStepPhUp()
+  void RunStepPhUp()
   {
     Serial.println("Activating PH stabilizer pump (boosting PH)");
     actionEndTime = millis() + phStep;
     digitalWrite(PUMP_PH_UP, HIGH);
   }
 
-  void setTarget(float target)
+  void SetTarget(float target)
   {
     Serial.printf("Setting target PH to %f \n", target);
     targetPh = target;
   }
 
-  void setTolerance(float tolerance)
+  void SetTolerance(float tolerance)
   {
     Serial.printf("Setting tolerance PH to %f \n", tolerance);
     phTolerance = tolerance;
   }
 
-  void setStep(int step)
+  void SetStep(int step)
   {
     Serial.printf("Setting PH step duration to %d ms \n", step);
     phStep = step;
   }
 
-  void setAdjustCooldown(int cooldown)
+  void SetAdjustCooldown(int cooldown)
   {
     Serial.printf("Setting PH adjust cooldown duration to %d ms \n", cooldown);
     phAdjustCooldown = cooldown;
   }
 
-  void setTestCooldown(int cooldown)
+  void SetTestCooldown(int cooldown)
   {
     Serial.printf("Setting PH test cooldown duration to %d ms \n", cooldown);
     phTestCooldown = cooldown;
   }
 
-  void testPh()
+  void TestPh()
   {
     Serial.println("Testing PH");
     nextTestTime = millis() + phTestCooldown;
   }
 
-  void update()
+  void Update()
   {
     unsigned long timeElapsed = millis();
     if(timeElapsed > actionEndTime)
@@ -77,7 +77,7 @@ namespace PhMgr
 
     if(timeElapsed > nextTestTime)
     {
-        testPh();
+        TestPh();
     }
   }
 }

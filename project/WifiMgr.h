@@ -4,7 +4,7 @@
 
 namespace WifiMgr
 {
-  void setupWifi()
+  void SetupWifi()
   {
     WiFi.mode(WIFI_STA);
     WiFi.setAutoReconnect(true);
@@ -12,7 +12,7 @@ namespace WifiMgr
     WiFi.begin(ssid, password);
   }
 
-  void connectWifi()
+  void ConnectWifi()
   {
     Serial.println("Connecting to wifi...");
     // Wait for connection

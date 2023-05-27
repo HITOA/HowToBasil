@@ -6,109 +6,109 @@ namespace WebServer
 {
   ESP8266WebServer server(80);
 
-  void handleRoot()
+  void HandleRoot()
   {
     digitalWrite(LED, 1);
-    server.send(200, "text/html", WebUI::getPageUI());
+    server.send(200, "text/html", WebUI::GetPageUI());
     digitalWrite(LED, 0);
   }
 
-  void handleNotFound()
+  void HandleNotFound()
   {
     digitalWrite(LED, 1);
     server.send(404, "text/plain", "WUT?");
     digitalWrite(LED, 0);
   }
 
-  void lowerPh()
+  void LowerPh()
   {
-    PhMgr::runStepPhDown();
+    PhMgr::RunStepPhDown();
   }
 
-  void raisePh()
+  void RaisePh()
   {
-    PhMgr::runStepPhUp();
+    PhMgr::RunStepPhUp();
   }
 
-  void setTargetPh()
+  void SetTargetPh()
   {
-    PhMgr::setTarget(atof(server.arg(0).c_str()));
+    PhMgr::SetTarget(atof(server.arg(0).c_str()));
   }
 
-  void setTolerancePh()
+  void SetTolerancePh()
   {
-    PhMgr::setTolerance(atof(server.arg(0).c_str()));
+    PhMgr::SetTolerance(atof(server.arg(0).c_str()));
   }
 
-  void setStepPh()
+  void SetStepPh()
   {
-    PhMgr::setStep(atoi(server.arg(0).c_str()));
+    PhMgr::SetStep(atoi(server.arg(0).c_str()));
   }
 
-  void setAdjustCooldownPh()
+  void SetAdjustCooldownPh()
   {
-    PhMgr::setAdjustCooldown(atoi(server.arg(0).c_str()));
+    PhMgr::SetAdjustCooldown(atoi(server.arg(0).c_str()));
   }
 
-  void setTestCooldownPh()
+  void SetTestCooldownPh()
   {
-    PhMgr::setTestCooldown(atoi(server.arg(0).c_str()));
+    PhMgr::SetTestCooldown(atoi(server.arg(0).c_str()));
   }
 
-  void raiseNutrients()
+  void RaiseNutrients()
   {
-    NutrientsMgr::runStepNutrientsUp();
+    NutrientsMgr::RunStepNutrientsUp();
   }
 
-  void setTargetNutrients()
+  void SetTargetNutrients()
   {
-    NutrientsMgr::setTarget(atof(server.arg(0).c_str()));
+    NutrientsMgr::SetTarget(atof(server.arg(0).c_str()));
   }
 
-  void setToleranceNutrients()
+  void SetToleranceNutrients()
   {
-    NutrientsMgr::setTolerance(atof(server.arg(0).c_str()));
+    NutrientsMgr::SetTolerance(atof(server.arg(0).c_str()));
   }
 
-  void setStepNutrients()
+  void SetStepNutrients()
   {
-    NutrientsMgr::setStep(atoi(server.arg(0).c_str()));
+    NutrientsMgr::SetStep(atoi(server.arg(0).c_str()));
   }
 
-  void setAdjustCooldownNutrients()
+  void SetAdjustCooldownNutrients()
   {
-    NutrientsMgr::setAdjustCooldown(atoi(server.arg(0).c_str()));
+    NutrientsMgr::SetAdjustCooldown(atoi(server.arg(0).c_str()));
   }
 
-  void setTestCooldownNutrients()
+  void SetTestCooldownNutrients()
   {
-    NutrientsMgr::setTestCooldown(atoi(server.arg(0).c_str()));
+    NutrientsMgr::SetTestCooldown(atoi(server.arg(0).c_str()));
   }
 
-  void setup(void)
+  void Setup(void)
   {
-    server.on("/",                          handleRoot);
-    server.on("/lower-ph",                  lowerPh);
-    server.on("/raise-ph",                  raisePh);
-    server.on("/target-ph",                 setTargetPh);
-    server.on("/tolerance-ph",              setTolerancePh);
-    server.on("/step-ph",                   setStepPh);
-    server.on("/adjust-cooldown-ph",        setAdjustCooldownPh);
-    server.on("/test-cooldown-ph",          setTestCooldownPh);
-    server.on("/raise-nutrients",           raiseNutrients);
-    server.on("/target-nutrients",          setTargetNutrients);
-    server.on("/tolerance-nutrients",       setToleranceNutrients);
-    server.on("/step-nutrients",            setStepNutrients);
-    server.on("/adjust-cooldown-nutrients", setAdjustCooldownNutrients);
-    server.on("/test-cooldown-nutrients",   setTestCooldownNutrients);
+    server.on("/",                          HandleRoot);
+    server.on("/lower-ph",                  LowerPh);
+    server.on("/raise-ph",                  RaisePh);
+    server.on("/target-ph",                 SetTargetPh);
+    server.on("/tolerance-ph",              SetTolerancePh);
+    server.on("/step-ph",                   SetStepPh);
+    server.on("/adjust-cooldown-ph",        SetAdjustCooldownPh);
+    server.on("/test-cooldown-ph",          SetTestCooldownPh);
+    server.on("/raise-nutrients",           RaiseNutrients);
+    server.on("/target-nutrients",          SetTargetNutrients);
+    server.on("/tolerance-nutrients",       SetToleranceNutrients);
+    server.on("/step-nutrients",            SetStepNutrients);
+    server.on("/adjust-cooldown-nutrients", SetAdjustCooldownNutrients);
+    server.on("/test-cooldown-nutrients",   SetTestCooldownNutrients);
 
-    server.onNotFound(handleNotFound);
+    server.onNotFound(HandleNotFound);
 
     server.begin();
     Serial.println("HTTP server started");
   }
 
-  void update()
+  void Update()
   {
     server.handleClient();
     MDNS.update();

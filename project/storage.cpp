@@ -89,6 +89,7 @@ bool Storage::DeleteEntry(const char* entryName) {
   --header.entryCount;
   EEPROM.put(0, header);
   EEPROM.commit();
+  return true;
 }
 
 int Storage::Read(StorageEntry entry, char* data, size_t size) {

@@ -125,7 +125,7 @@ namespace WebUI
   </html>\
   ";
 
-  static const char* getPageUI()
+  static const char* GetPageUI()
   {
     sprintf(pageBuffer, webPageUI, 
     PhMgr::currentPh,

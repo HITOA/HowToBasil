@@ -1,6 +1,8 @@
 #ifndef SERIAL_HEADER
 #define SERIAL_HEADER
 
+#include <arduino.h>
+
 #ifdef SERIAL_ENABLE
 
 #define SERIAL_INIT(baud_rate) Serial.begin(baud_rate)
