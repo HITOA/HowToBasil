@@ -14,16 +14,16 @@ namespace WifiMgr
 
   void ConnectWifi()
   {
-    Serial.println("Connecting to wifi...");
+    SERIAL_PRINTLN("Connecting to wifi...");
     // Wait for connection
     while (WiFi.status() != WL_CONNECTED) {
       delay(500);
-      Serial.print(".");
+      SERIAL_PRINT(".");
     }
-    Serial.println("");
-    Serial.print("Connected to ");
-    Serial.println(ssid);
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
+    SERIAL_PRINTLN("");
+    SERIAL_PRINT("Connected to ");
+    SERIAL_PRINTLN(ssid);
+    SERIAL_PRINT("IP address: ");
+    SERIAL_PRINTLN(WiFi.localIP());
   }
 }

@@ -105,7 +105,7 @@ namespace WebServer
     server.onNotFound(HandleNotFound);
 
     server.begin();
-    Serial.println("HTTP server started");
+    SERIAL_PRINTLN("HTTP server started");
   }
 
   void Update()

@@ -17,51 +17,51 @@ namespace PhMgr
 
   void RunStepPhDown()
   {
-    Serial.println("Activating PH stabilizer pump (lowering PH)");
+    SERIAL_PRINTLN("Activating PH stabilizer pump (lowering PH)");
     actionEndTime = millis() + phStep;
     digitalWrite(PUMP_PH_DOWN, HIGH);
   }
 
   void RunStepPhUp()
   {
-    Serial.println("Activating PH stabilizer pump (boosting PH)");
+    SERIAL_PRINTLN("Activating PH stabilizer pump (boosting PH)");
     actionEndTime = millis() + phStep;
     digitalWrite(PUMP_PH_UP, HIGH);
   }
 
   void SetTarget(float target)
   {
-    Serial.printf("Setting target PH to %f \n", target);
+    SERIAL_PRINTF("Setting target PH to %f \n", target);
     targetPh = target;
   }
 
   void SetTolerance(float tolerance)
   {
-    Serial.printf("Setting tolerance PH to %f \n", tolerance);
+    SERIAL_PRINTF("Setting tolerance PH to %f \n", tolerance);
     phTolerance = tolerance;
   }
 
   void SetStep(int step)
   {
-    Serial.printf("Setting PH step duration to %d ms \n", step);
+    SERIAL_PRINTF("Setting PH step duration to %d ms \n", step);
     phStep = step;
   }
 
   void SetAdjustCooldown(int cooldown)
   {
-    Serial.printf("Setting PH adjust cooldown duration to %d ms \n", cooldown);
+    SERIAL_PRINTF("Setting PH adjust cooldown duration to %d ms \n", cooldown);
     phAdjustCooldown = cooldown;
   }
 
   void SetTestCooldown(int cooldown)
   {
-    Serial.printf("Setting PH test cooldown duration to %d ms \n", cooldown);
+    SERIAL_PRINTF("Setting PH test cooldown duration to %d ms \n", cooldown);
     phTestCooldown = cooldown;
   }
 
   void TestPh()
   {
-    Serial.println("Testing PH");
+    SERIAL_PRINTLN("Testing PH");
     nextTestTime = millis() + phTestCooldown;
   }
 
@@ -70,7 +70,7 @@ namespace PhMgr
     unsigned long timeElapsed = millis();
     if(timeElapsed > actionEndTime)
     {
-      Serial.println("Stop pumping PH stabilizer");
+      SERIAL_PRINTLN("Stop pumping PH stabilizer");
       digitalWrite(PUMP_PH_DOWN, LOW);
       digitalWrite(PUMP_PH_UP, LOW);
     }

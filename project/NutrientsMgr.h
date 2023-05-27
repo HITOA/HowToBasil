@@ -16,44 +16,44 @@ namespace NutrientsMgr
 
   void RunStepNutrientsUp()
   {
-    Serial.println("Activating Nutrients Pump");
+    SERIAL_PRINTLN("Activating Nutrients Pump");
     actionEndTime = millis() + nutrientsStep;
     digitalWrite(PUMP_NUTRIENTS, HIGH);
   }
 
   void SetTarget(float target)
   {
-    Serial.printf("Setting target Nutrients PPM to %f \n", target);
+    SERIAL_PRINTF("Setting target Nutrients PPM to %f \n", target);
     targetNutrients = target;
   }
 
   void SetTolerance(float tolerance)
   {
-    Serial.printf("Setting Nutrients tolerance PPM to %f \n", tolerance);
+    SERIAL_PRINTF("Setting Nutrients tolerance PPM to %f \n", tolerance);
     nutrientsTolerance = tolerance;
   }
 
   void SetStep(int step)
   {
-    Serial.printf("Setting Nutrients step duration to %d ms \n", step);
+    SERIAL_PRINTF("Setting Nutrients step duration to %d ms \n", step);
     nutrientsStep = step;
   }
 
   void SetAdjustCooldown(int cooldown)
   {
-    Serial.printf("Setting Nutrients adjust cooldown duration to %d ms \n", cooldown);
+    SERIAL_PRINTF("Setting Nutrients adjust cooldown duration to %d ms \n", cooldown);
     nutrientsAdjustCooldown = cooldown;
   }
 
   void SetTestCooldown(int cooldown)
   {
-    Serial.printf("Setting Nutrients test cooldown duration to %d ms \n", cooldown);
+    SERIAL_PRINTF("Setting Nutrients test cooldown duration to %d ms \n", cooldown);
     nutrientsTestCooldown = cooldown;
   }
 
   void TestNutrients()
   {
-    Serial.println("Testing Nutrients");
+    SERIAL_PRINTLN("Testing Nutrients");
     nextTestTime = millis() + nutrientsTestCooldown;
   }
 
@@ -62,7 +62,7 @@ namespace NutrientsMgr
     unsigned long timeElapsed = millis();
     if(timeElapsed > actionEndTime)
     {
-      Serial.println("Stop pumping Nutrients");
+      SERIAL_PRINTLN("Stop pumping Nutrients");
       digitalWrite(PUMP_NUTRIENTS, LOW);
     }
 
