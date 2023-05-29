@@ -1,6 +1,9 @@
 #ifndef WIFIMGR_HEADER
 #define WIFIMGR_HEADER
 
+#include <cstddef>
+#include <arduino.h>
+
 #define ESP_AP_STORAGE_ENTRY_NAME "esp-ap-credentials"
 #define ESP_AUTO_CONNECT_STORAGE_ENTRY_NAME "esp-auto-connect-credentials"
 
@@ -16,8 +19,17 @@ namespace WifiMgr
     char password[64];
   };
 
+  struct WifiScanEntry {
+    char ssid[33];
+    int rssi;
+  };
+
   void Init();
-  bool Connect(WifiCredentials credentials, unsigned long timeout = DEFAULT_TIMEOUT_CONNECTION_VALUE);
+  void Connect(WifiCredentials credentials, unsigned long timeout = DEFAULT_TIMEOUT_CONNECTION_VALUE);
+  int ScanNetworks(WifiScanEntry* buff, size_t size);
+  bool IsConnected();
+  String GetConnectedWifiSSID();
+  WifiCredentials GetAPCredentials();
 }
 
 #endif

@@ -6,115 +6,312 @@
 #include "Serial.h"
 #include "NetworkInclude.h"
 #include "WebUI.h"
+#include "Storage.h"
+#include "WifiMgr.h"
 #include "NutrientsMgr.h"
 #include "PhMgr.h"
+#include "HTML.h"
 
-WebServer server(80);
+AsyncWebServer server(80);
+static char commonBuffer[4096];
 
-void BasilWebServer::HandleRoot()
+void HandleRoot(AsyncWebServerRequest* request)
 {
   digitalWrite(LED, 1);
-  server.send(200, "text/html", WebUI::GetPageUI());
+  request->send(200, "text/html", HTML::IndexPage);
   digitalWrite(LED, 0);
 }
 
-void BasilWebServer::HandleNotFound()
-{
-  digitalWrite(LED, 1);
-  server.send(404, "text/plain", "WUT?");
-  digitalWrite(LED, 0);
+void HandlePanel(AsyncWebServerRequest* request) {
+  snprintf(commonBuffer, sizeof(commonBuffer), HTML::PanelPage,
+    PhMgr::GetCurrentPh(),
+    STATUS_STRING[PhMgr::GetStatus()],
+    PhMgr::GetTarget(),
+    PhMgr::GetTolerance(),
+    PhMgr::GetStep(),
+    PhMgr::GetAdjustCooldown(),
+    PhMgr::GetTestCooldown(),
+    NutrientsMgr::GetCurrentNutrients(),
+    STATUS_STRING[NutrientsMgr::GetStatus()],
+    NutrientsMgr::GetTarget(),
+    NutrientsMgr::GetTolerance(),
+    NutrientsMgr::GetStep(),
+    NutrientsMgr::GetAdjustCooldown(),
+    NutrientsMgr::GetTestCooldown()
+  );
+
+  request->send(200, "text/html", commonBuffer);
 }
 
-void BasilWebServer::LowerPh()
+void HandleSettings(AsyncWebServerRequest* request) {
+  WifiMgr::WifiCredentials apCredentials = WifiMgr::GetAPCredentials();
+
+  snprintf(commonBuffer, sizeof(commonBuffer), HTML::SettingsPage,
+    WifiMgr::IsConnected() ? WifiMgr::GetConnectedWifiSSID().c_str() : "NONE",
+    apCredentials.ssid,
+    apCredentials.ssid,
+    apCredentials.password
+  );
+
+  request->send(200, "text/html", commonBuffer);
+}
+
+void HandleStylesheet(AsyncWebServerRequest* request) {
+  request->send(200, "text/css", HTML::Stylesheet);
+}
+
+void LowerPh(AsyncWebServerRequest* request)
 {
+  request->send(200, "text/plain", "Ok");
   PhMgr::RunStepPhDown();
 }
 
-void BasilWebServer::RaisePh()
+void RaisePh(AsyncWebServerRequest* request)
 {
+  request->send(200, "text/plain", "Ok");
   PhMgr::RunStepPhUp();
 }
 
-void BasilWebServer::SetTargetPh()
+void SetTargetPh(AsyncWebServerRequest* request)
 {
-  PhMgr::SetTarget(atof(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  PhMgr::SetTarget(atof(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetTolerancePh()
+void SetTolerancePh(AsyncWebServerRequest* request)
 {
-  PhMgr::SetTolerance(atof(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  PhMgr::SetTolerance(atof(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetStepPh()
+void SetStepPh(AsyncWebServerRequest* request)
 {
-  PhMgr::SetStep(atoi(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  PhMgr::SetStep(atoi(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetAdjustCooldownPh()
+void SetAdjustCooldownPh(AsyncWebServerRequest* request)
 {
-  PhMgr::SetAdjustCooldown(atoi(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  PhMgr::SetAdjustCooldown(atoi(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetTestCooldownPh()
+void SetTestCooldownPh(AsyncWebServerRequest* request)
 {
-  PhMgr::SetTestCooldown(atoi(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  PhMgr::SetTestCooldown(atoi(parameter->value().c_str()));
 }
 
-void BasilWebServer::RaiseNutrients()
+void RaiseNutrients(AsyncWebServerRequest* request)
 {
+  request->send(200, "text/plain", "Ok");
   NutrientsMgr::RunStepNutrientsUp();
 }
 
-void BasilWebServer::SetTargetNutrients()
+void SetTargetNutrients(AsyncWebServerRequest* request)
 {
-  NutrientsMgr::SetTarget(atof(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  NutrientsMgr::SetTarget(atof(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetToleranceNutrients()
+void SetToleranceNutrients(AsyncWebServerRequest* request)
 {
-  NutrientsMgr::SetTolerance(atof(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  NutrientsMgr::SetTolerance(atof(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetStepNutrients()
+void SetStepNutrients(AsyncWebServerRequest* request)
 {
-  NutrientsMgr::SetStep(atoi(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  NutrientsMgr::SetStep(atoi(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetAdjustCooldownNutrients()
+void SetAdjustCooldownNutrients(AsyncWebServerRequest* request)
 {
-  NutrientsMgr::SetAdjustCooldown(atoi(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  NutrientsMgr::SetAdjustCooldown(atoi(parameter->value().c_str()));
 }
 
-void BasilWebServer::SetTestCooldownNutrients()
+void SetTestCooldownNutrients(AsyncWebServerRequest* request)
 {
-  NutrientsMgr::SetTestCooldown(atoi(server.arg(0).c_str()));
+  if (request->params() < 1) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* parameter = request->getParam(0);
+
+  NutrientsMgr::SetTestCooldown(atoi(parameter->value().c_str()));
 }
 
-void BasilWebServer::Setup()
+void ConnectWifi(AsyncWebServerRequest* request) {
+  if (request->params() < 2) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* ssid = request->getParam(0);
+  AsyncWebParameter* password = request->getParam(1);
+
+  if (ssid->value().length() < 2 || ssid->value().length() > 32) {
+    SERIAL_PRINTLN("Can't connect to WIFI : SSID to short or too long (2-32)");
+    return;
+  }
+  if (password->value().length() < 8 || password->value().length() > 63){
+    SERIAL_PRINTLN("Can't connect to WIFI : Password to short or too long (8-63)");
+    return;
+  }
+
+  WifiMgr::WifiCredentials credentials{ 0 };
+  memcpy(credentials.ssid, ssid->value().c_str(), ssid->value().length() + 1);
+  memcpy(credentials.password, password->value().c_str(), password->value().length() + 1);
+
+  WifiMgr::Connect(credentials);
+}
+
+void UpdateAPSettings(AsyncWebServerRequest* request) {
+  if (request->params() < 2) {
+    SERIAL_PRINTF("%s failed. bad number of argument (%d)\n", request->url(), request->params());
+    request->send(400, "text/plain", "Bad request.");
+    return;
+  } else {
+    request->send(200, "text/plain", "Ok");
+  }
+
+  AsyncWebParameter* ssid = request->getParam(0);
+  AsyncWebParameter* password = request->getParam(1);
+
+  SERIAL_PRINTF("Updating AP settings.\nSSID : %s\nPASSWORD : %s\n", ssid->value().c_str(), password->value().c_str());
+
+  if (ssid->value().length() < 2 || ssid->value().length() > 32) {
+    SERIAL_PRINTLN("SSID to short or too long (2-32)");
+    return;
+  }
+  if (password->value().length() < 8 || password->value().length() > 63){
+    SERIAL_PRINTLN("Password to short or too long (8-63)");
+    return;
+  }
+
+  WifiMgr::WifiCredentials credentials{ 0 };
+  memcpy(credentials.ssid, ssid->value().c_str(), ssid->value().length() + 1);
+  memcpy(credentials.password, password->value().c_str(), password->value().length() + 1);
+  Storage::StorageEntry credentialsStorageEntry = Storage::CreateEntry(ESP_AP_STORAGE_ENTRY_NAME, sizeof(WifiMgr::WifiCredentials));
+  Storage::Write(credentialsStorageEntry, (char*)&credentials, sizeof(WifiMgr::WifiCredentials));
+}
+
+void BasilWebServer::Init()
 {
-  server.on("/",                          HandleRoot);
-  server.on("/lower-ph",                  LowerPh);
-  server.on("/raise-ph",                  RaisePh);
-  server.on("/target-ph",                 SetTargetPh);
-  server.on("/tolerance-ph",              SetTolerancePh);
-  server.on("/step-ph",                   SetStepPh);
-  server.on("/adjust-cooldown-ph",        SetAdjustCooldownPh);
-  server.on("/test-cooldown-ph",          SetTestCooldownPh);
-  server.on("/raise-nutrients",           RaiseNutrients);
-  server.on("/target-nutrients",          SetTargetNutrients);
-  server.on("/tolerance-nutrients",       SetToleranceNutrients);
-  server.on("/step-nutrients",            SetStepNutrients);
-  server.on("/adjust-cooldown-nutrients", SetAdjustCooldownNutrients);
-  server.on("/test-cooldown-nutrients",   SetTestCooldownNutrients);
+  server.on("/",                          HTTP_GET,  HandleRoot);
+  server.on("/panel.html",                HTTP_GET,  HandlePanel);
+  server.on("/settings.html",             HTTP_GET,  HandleSettings);
+  server.on("/stylesheet.css",            HTTP_GET,  HandleStylesheet);
 
-  server.onNotFound(HandleNotFound);
+  server.on("/lower-ph",                  HTTP_POST, LowerPh);
+  server.on("/raise-ph",                  HTTP_POST, RaisePh);
+  server.on("/target-ph",                 HTTP_POST, SetTargetPh);
+  server.on("/tolerance-ph",              HTTP_POST, SetTolerancePh);
+  server.on("/step-ph",                   HTTP_POST, SetStepPh);
+  server.on("/adjust-cooldown-ph",        HTTP_POST, SetAdjustCooldownPh);
+  server.on("/test-cooldown-ph",          HTTP_POST, SetTestCooldownPh);
+  server.on("/raise-nutrients",           HTTP_POST, RaiseNutrients);
+  server.on("/target-nutrients",          HTTP_POST, SetTargetNutrients);
+  server.on("/tolerance-nutrients",       HTTP_POST, SetToleranceNutrients);
+  server.on("/step-nutrients",            HTTP_POST, SetStepNutrients);
+  server.on("/adjust-cooldown-nutrients", HTTP_POST, SetAdjustCooldownNutrients);
+  server.on("/test-cooldown-nutrients",   HTTP_POST, SetTestCooldownNutrients);
+  server.on("/connect-wifi",              HTTP_POST, ConnectWifi);
+  server.on("/update-ap-settings",        HTTP_POST, UpdateAPSettings);
+}
 
+void BasilWebServer::Start()
+{
   server.begin();
   SERIAL_PRINTLN("HTTP server started");
-}
-
-void BasilWebServer::Update()
-{
-  server.handleClient();
-  //MDNS.update();
 }
